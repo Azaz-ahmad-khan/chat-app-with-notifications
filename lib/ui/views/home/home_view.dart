@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:noti_chat/ui/views/chat/chat_view.dart';
 import 'package:noti_chat/ui/views/home/home_view_model.dart';
 import 'package:noti_chat/ui/views/signIN/sign_in_view.dart';
 import 'package:provider/provider.dart';
@@ -52,15 +53,26 @@ class HomeView extends StatelessWidget {
                     }
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ChatView(user: user,),
+                            ),
+                          );
+                        },
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(10),
+                          ),
+                          tileColor: Colors.grey.shade200,
+                          leading: CircleAvatar(
+                            child: Text((index + 1).toString()),
+                          ),
+                          title: Text(user['email']),
                         ),
-                        tileColor: Colors.grey.shade200,
-                        leading: CircleAvatar(
-                          child: Text((index + 1).toString()),
-                        ),
-                        title: Text(user['email']),
                       ),
                     );
                   },
