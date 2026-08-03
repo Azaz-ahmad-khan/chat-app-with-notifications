@@ -36,6 +36,17 @@ class SignUpView extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     TextField(
+                      controller: vM.nameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        hintText: 'Enter Your Name here',
+                        labelText: 'Name',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
                       controller: vM.emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -90,6 +101,7 @@ class SignUpView extends StatelessWidget {
                           return;
                         }
                         await vM.signUpUser(
+                          vM.nameController.text,
                           vM.emailController.text,
                           vM.passwordController.text,
                         );

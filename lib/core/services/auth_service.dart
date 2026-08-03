@@ -16,7 +16,7 @@ class AuthService {
     }
   }
 
-  Future<void> saveUserToFirestore(String email, String password) async {
+  Future<void> saveUserToFirestore(String name,String email, String password,) async {
     try {
       UserCredential? uCredential = await signUpwithEmail(email, password);
       if (uCredential == null) throw Exception('User Not created');
@@ -26,6 +26,7 @@ class AuthService {
           .set({
             'email': uCredential.user!.email,
             'userId': uCredential.user!.uid,
+            'name':name
           });
     } catch (e) {
       throw Exception(e.toString());
