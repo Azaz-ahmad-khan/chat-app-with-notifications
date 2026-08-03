@@ -1,3 +1,4 @@
+//lib\core\services\chat_service.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:noti_chat/core/models/message_model.dart';
 
@@ -36,6 +37,7 @@ class ChatService {
         .collection('chats')
         .doc(chatRoomId)
         .collection('messages')
+        .orderBy('sendingTime', descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {

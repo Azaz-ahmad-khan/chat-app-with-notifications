@@ -1,3 +1,4 @@
+//lib\ui\views\signUp\sign_up_view.dart
 import 'package:flutter/material.dart';
 import 'package:noti_chat/ui/views/home/home_view.dart';
 import 'package:noti_chat/ui/views/signIN/sign_in_view.dart';

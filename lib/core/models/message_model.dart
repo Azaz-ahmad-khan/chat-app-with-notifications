@@ -1,3 +1,4 @@
+//lib\core\models\message_model.dart
 class MessageModel {
   final String message;
   final String userId;

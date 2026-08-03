@@ -1,3 +1,4 @@
+//lib\ui\views\home\home_view.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:noti_chat/ui/views/chat/chat_view.dart';
@@ -58,8 +59,7 @@ class HomeView extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatView(user: user,),
+                              builder: (context) => ChatView(user: user),
                             ),
                           );
                         },
@@ -71,7 +71,7 @@ class HomeView extends StatelessWidget {
                           leading: CircleAvatar(
                             child: Text((index + 1).toString()),
                           ),
-                          title: Text(user['email']),
+                          title: Text(user['name']),
                         ),
                       ),
                     );

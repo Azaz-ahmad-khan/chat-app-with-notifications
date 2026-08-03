@@ -1,3 +1,4 @@
+//lib\ui\views\chat\chat_view_model.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:noti_chat/core/models/message_model.dart';
