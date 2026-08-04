@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:noti_chat/core/services/notification_service.dart';
 import 'package:noti_chat/firebase_options.dart';
 import 'package:noti_chat/ui/views/chat/chat_view_model.dart';
 import 'package:noti_chat/ui/views/home/home_view.dart';
@@ -14,13 +15,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.instance.initialize();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => SignInViewModel()),
-        ChangeNotifierProvider(create: (context) => ChatViewModel(),)
+        ChangeNotifierProvider(create: (context) => ChatViewModel()),
       ],
       child: MyApp(),
     ),

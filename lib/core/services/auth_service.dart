@@ -1,6 +1,7 @@
 //lib\core\services\auth_service.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:noti_chat/core/services/notification_service.dart';
 
 class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -17,7 +18,11 @@ class AuthService {
     }
   }
 
-  Future<void> saveUserToFirestore(String name,String email, String password,) async {
+  Future<void> saveUserToFirestore(
+    String name,
+    String email,
+    String password,
+  ) async {
     try {
       UserCredential? uCredential = await signUpwithEmail(email, password);
       if (uCredential == null) throw Exception('User Not created');
@@ -27,8 +32,10 @@ class AuthService {
           .set({
             'email': uCredential.user!.email,
             'userId': uCredential.user!.uid,
-            'name':name
+            'name': name,
+            'fcmToken': '',
           });
+      await getToken(uCredential.user!.uid);
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -40,6 +47,9 @@ class AuthService {
         email: email,
         password: password,
       );
+      if (user.user != null) {
+        await getToken(user.user!.uid);
+      }
       return user;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.toString());
@@ -57,6 +67,14 @@ class AuthService {
       return snapShot.docs.map((doc) {
         return doc.data();
       }).toList();
+    });
+  }
+
+  Future<void> getToken(String user) async {
+    final token = await NotificationService.instance.getToken();
+    if (token == null) return;
+    await firebaseFirestore.collection('Users').doc(user).update({
+      'fcmToken': token,
     });
   }
 }

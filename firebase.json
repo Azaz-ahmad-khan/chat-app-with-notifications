@@ -1,1 +1,39 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"notification-with-chat","appId":"1:409341590834:android:ac372bd2522cc24619ab2b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"notification-with-chat","configurations":{"android":"1:409341590834:android:ac372bd2522cc24619ab2b","ios":"1:409341590834:ios:bca5de9426c4b3ab19ab2b"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "notification-with-chat",
+          "appId": "1:409341590834:android:ac372bd2522cc24619ab2b",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "notification-with-chat",
+          "configurations": {
+            "android": "1:409341590834:android:ac372bd2522cc24619ab2b",
+            "ios": "1:409341590834:ios:bca5de9426c4b3ab19ab2b"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}
