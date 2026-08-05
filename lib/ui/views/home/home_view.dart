@@ -1,4 +1,5 @@
 //lib\ui\views\home\home_view.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:noti_chat/ui/views/chat/chat_view.dart';
@@ -72,6 +73,34 @@ class HomeView extends StatelessWidget {
                             child: Text((index + 1).toString()),
                           ),
                           title: Text(user['name']),
+                          trailing: StreamBuilder(
+                            stream: vM.getUnReadCount(
+                              FirebaseAuth.instance.currentUser!.uid,
+                              user['userId'],
+                            ),
+                            builder: (context, snapshot) {
+                              final count = snapshot.data ?? 0;
+                              if (count == 0) return SizedBox();
+
+                              return Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.green,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    count > 99 ? '99+' : count.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: .bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );

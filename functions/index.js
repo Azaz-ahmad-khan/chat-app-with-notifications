@@ -54,6 +54,19 @@ exports.sendMessageNotification = functions.firestore
 
         const receiverToken = receiverDoc.data().fcmToken;
 
+        // Increment unread count for receiver
+        // This creates the field if it doesn't exist, or increments if it does
+        await admin
+            .firestore()
+            .collection("chats")
+            .doc(chatRoomId)
+            .set(
+                { [`unreadCount_${receiverId}`]: admin.firestore.FieldValue.increment(1) },
+                { merge: true },
+            );
+
+        console.log("Unread count incremented for:", receiverId);
+
         if (!receiverToken || receiverToken === "") {
             console.log("Receiver has no FCM token");
             return null;

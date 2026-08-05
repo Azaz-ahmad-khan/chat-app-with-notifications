@@ -32,4 +32,15 @@ class ChatViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> setUnreadCountToZero(
+    String currentUserId,
+    String otherUserId,
+  ) async {
+    try {
+      await chatService.setUnreadToZero(currentUserId, otherUserId);
+    } catch (e) {
+      errorMessage = e.toString();
+    }
+  }
 }

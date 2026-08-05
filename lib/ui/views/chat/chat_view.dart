@@ -5,18 +5,30 @@ import 'package:noti_chat/core/models/message_model.dart';
 import 'package:noti_chat/ui/views/chat/chat_view_model.dart';
 import 'package:provider/provider.dart';
 
-class ChatView extends StatelessWidget {
+class ChatView extends StatefulWidget {
   final Map<String, dynamic> user;
   const ChatView({super.key, required this.user});
 
   @override
+  State<ChatView> createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> {
+  @override
   Widget build(BuildContext context) {
     final vM = context.read<ChatViewModel>();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      vM.setUnreadCountToZero(
+        FirebaseAuth.instance.currentUser!.uid,
+        widget.user['userId'],
+      );
+    });
     return Scaffold(
       appBar: AppBar(
-        title: Text(user['email']),
+        title: Text(widget.user['name']),
         backgroundColor: Colors.red.shade200,
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -24,7 +36,7 @@ class ChatView extends StatelessWidget {
             child: StreamBuilder(
               stream: vM.getMessages(
                 FirebaseAuth.instance.currentUser!.uid,
-                user['userId'],
+                widget.user['userId'],
               ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,7 +122,7 @@ class ChatView extends StatelessWidget {
                                   );
                                   await vM.sendMessage(
                                     FirebaseAuth.instance.currentUser!.uid,
-                                    user['userId'],
+                                    widget.user['userId'],
                                     message,
                                   );
                                   vM.messageController.clear();

@@ -45,4 +45,27 @@ class ChatService {
           }).toList();
         });
   }
+
+  Future<void> setUnreadToZero(String currentUserId, String otherUserId) async {
+    try {
+      List ids = [currentUserId, otherUserId];
+      ids.sort();
+      final chatRoomId = ids.join('-');
+      await firestore.collection('chats').doc(chatRoomId).set({
+        'unreadCount_$currentUserId': 0,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      throw Exception('Error Occured while setting the value to zero');
+    }
+  }
+
+  Stream<int> getUnreadCount(String currentUserId, String otherUserId) {
+    List ids = [currentUserId, otherUserId];
+    ids.sort();
+    final chatRoomId = ids.join('-');
+    return firestore.collection('chats').doc(chatRoomId).snapshots().map((doc) {
+      if (!doc.exists) return 0;
+      return doc.data()?['unreadCount_$currentUserId'];
+    });
+  }
 }

@@ -1,8 +1,10 @@
 //lib\ui\views\home\home_view_model.dart
 import 'package:flutter/material.dart';
 import 'package:noti_chat/core/services/auth_service.dart';
+import 'package:noti_chat/core/services/chat_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
+  ChatService chatService = ChatService();
   String? errorMessage;
   AuthService authService = AuthService();
   Future<bool> logOut() async {
@@ -19,5 +21,9 @@ class HomeViewModel extends ChangeNotifier {
 
   Stream<List<Map<String, dynamic>>> getUsers() {
     return authService.getUsers();
+  }
+
+  Stream<int> getUnReadCount(String currentUserId, String otherUserId) {
+    return chatService.getUnreadCount(currentUserId, otherUserId);
   }
 }
