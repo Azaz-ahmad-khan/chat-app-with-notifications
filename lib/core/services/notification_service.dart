@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:noti_chat/ui/views/chat/chat_view.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -7,6 +9,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class NotificationService {
+  static final GlobalKey<NavigatorState> navigationKey =
+      GlobalKey<NavigatorState>();
   static final NotificationService instance = NotificationService._internal();
   NotificationService._internal();
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
@@ -18,6 +22,18 @@ class NotificationService {
       debugPrint('Body: ${message.notification?.body}');
       debugPrint('Data: ${message.data}');
     });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint('message tapped from background');
+      handleNotificationNavigation(message.data);
+    });
+
+    RemoteMessage? initialMessage = await _fcm.getInitialMessage();
+    if (initialMessage != null) {
+      debugPrint('app opened from terminated state via notification');
+      await Future.delayed((Duration(seconds: 1)));
+      handleNotificationNavigation(initialMessage.data);
+    }
   }
 
   Future<void> requestPermission() async {
@@ -33,5 +49,26 @@ class NotificationService {
     final token = await _fcm.getToken();
     debugPrint('token: $token');
     return token;
+  }
+
+  void handleNotificationNavigation(Map<String, dynamic> data) {
+    debugPrint('Notification Data: $data');
+    final screen = data['screen'];
+    final senderId = data['senderId'];
+    final name = data['senderName'];
+
+    if (screen == 'chat' && senderId != null) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) => ChatView(
+            user: {
+              'userId': senderId,
+              'email': name ?? 'unknown',
+              'name': name ?? 'unknown',
+            },
+          ),
+        ),
+      );
+    }
   }
 }

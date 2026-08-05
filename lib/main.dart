@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Notifications Chat App',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      navigatorKey: NotificationService.navigationKey,
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
